@@ -1,5 +1,5 @@
 
-package test;
+package basic;
 
 import java.util.Timer;
 import java.util.TimerTask;

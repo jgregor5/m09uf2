@@ -1,4 +1,4 @@
-package test;
+package basic;
 
 /**
  * user vs daemon threads:
@@ -11,12 +11,12 @@ package test;
  *
  * @author julian
  */
-public class ThreadSleepTest implements Runnable {
+public class ThreadDaemonTest implements Runnable {
     
     private static long millis;
     private int secs;
     
-    public ThreadSleepTest(int secs) {
+    public ThreadDaemonTest(int secs) {
         this.secs = secs;
     }
     
@@ -36,7 +36,7 @@ public class ThreadSleepTest implements Runnable {
         try {
             Thread.sleep(seconds * 1000);
         } catch (InterruptedException ex) {
-            System.out.println(since() + "* interrupcio de " + Thread.currentThread().getName());
+            System.out.println(since() + "* interrupció de " + Thread.currentThread().getName());
         }
         
         System.out.println(since() + "< desperta " + Thread.currentThread().getName());
@@ -51,7 +51,7 @@ public class ThreadSleepTest implements Runnable {
     public static void test(boolean fillDaemon, int secsPare, int secsFill) {
         
         System.out.println(since() + String.format("* daemon:%b main:%ds fill: %ds", fillDaemon, secsPare, secsFill));
-        Thread thread = new Thread(new ThreadSleepTest(secsFill), "fill");
+        Thread thread = new Thread(new ThreadDaemonTest(secsFill), "fill");
         thread.setDaemon(fillDaemon);
         thread.start();
         sleep(secsPare);
@@ -61,11 +61,11 @@ public class ThreadSleepTest implements Runnable {
         
         millis = System.currentTimeMillis();
         System.out.println(since() + "> inici del main");        
-        
-        //test(false, 10, 5);
-        //test(false, 5, 10);        
-        //test(true, 10, 5);
-        test(true, 5, 10);
+           
+        //test(true, 10, 5); // el fill acaba i el pare segueix
+        test(false, 10, 5); // el fill acaba i el pare segueix        
+        //test(false, 5, 10); // el pare acaba i el fill segueix  
+        //test(true, 5, 10); // el pare acaba i el fill mor directament
         
         System.out.println(since() + "< fi del main");
     }    
