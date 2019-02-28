@@ -12,6 +12,7 @@ public class RaceConditionTest {
 
         protected long count = 0;
 
+        // synchronize this to solve the race condition!
         public void add(long value) {       
             
             long nextCount = this.count + value;
