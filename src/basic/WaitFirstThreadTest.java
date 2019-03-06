@@ -52,8 +52,8 @@ public class WaitFirstThreadTest {
     
     static class Worker implements Runnable {
         
-        private int id;
-        private Result result;
+        private final int id;
+        private final Result result;
         
         public Worker(Result result, int id) {
             this.result = result;
