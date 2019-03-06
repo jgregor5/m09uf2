@@ -16,7 +16,7 @@ public class WaitFirstThreadTest {
         Thread[] threads = new Thread[COUNT];
         
         for (int i=0; i<COUNT; i++) {
-            Worker worker = new Worker(result, i);
+            Worker worker = new Worker(result, i + 1);
             threads[i] = new Thread(worker, "worker-" + i);
             threads[i].start();            
         }
