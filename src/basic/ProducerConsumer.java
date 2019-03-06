@@ -9,6 +9,8 @@ import java.util.Random;
  * @author julian
  */
 public class ProducerConsumer {
+    
+    static final int COUNT = 10;
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -19,13 +21,16 @@ public class ProducerConsumer {
             @Override
             public void run() {
                 try {
-                    int value = 0;
-                    while (value < 10) {
-                        buffer.add(value);
-                        System.out.println("Produced " + value);
-                        value++;
+                    int count = 0;
+                    while (count < COUNT) {
+                        buffer.add(count);
+                        System.out.println("Produced " + count);
+                        count++;
                         Thread.sleep(250 + r.nextInt(2500));
                     }
+                    
+                    System.out.println("Ended producer");
+                    
                 } catch (InterruptedException e) {
                     System.out.println("producer interrupted!");
                 }
@@ -36,11 +41,16 @@ public class ProducerConsumer {
             @Override
             public void run() {
                 try {
-                    while (true) {
+                    int count = 0;
+                    while (count < COUNT) {
                         int value = buffer.poll();
-                        System.out.println("Consume " + value);                        
+                        System.out.println("Consume " + value);  
+                        count ++;
                         Thread.sleep(250 + r.nextInt(2500));
                     }
+                    
+                    System.out.println("Ended consumer");
+                    
                 } catch (InterruptedException e) {
                     System.out.println("consumer interrupted!");
                 }
@@ -51,7 +61,7 @@ public class ProducerConsumer {
         consumerThread.start();
         
         producerThread.join();
-        consumerThread.interrupt();
+        consumerThread.join();
     }
 
     static class Buffer {
