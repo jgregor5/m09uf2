@@ -23,7 +23,8 @@ public class WaitFirstThreadTest {
         
         System.out.println("MAIN: wait for one thread...");
         synchronized (result) {
-            result.wait();
+            while (result.get() == 0)
+                result.wait();
         }        
         
         System.out.println("MAIN: result: " + result.get());
@@ -35,6 +36,10 @@ public class WaitFirstThreadTest {
     static class Result {
         
         private int id;
+        
+        public Result() {
+            this.id = 0;
+        }
         
         public void set(int id) {
             this.id = id;
