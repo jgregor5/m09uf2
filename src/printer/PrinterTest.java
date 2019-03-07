@@ -18,7 +18,7 @@ public class PrinterTest {
         Random r = new Random();
         
         for (int i=0; i<COUNT; i++) {
-            int pages = r.nextInt(5);
+            int pages = r.nextInt(4) + 1;
             long delay = 250 + r.nextInt(2000);
             users[i] = new PrintUser("" + (char)(i + 65), printer, delay, pages);
         }
