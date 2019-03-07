@@ -16,7 +16,9 @@ public class SimpleWaitNotifyTest {
         fill.start();
         synchronized (fill) {
             System.out.println("Waiting for fill to complete...");
-            fill.wait();
+            while (!fill.done) {
+                fill.wait();
+            }
             System.out.println("Total is: " + fill.total);
         }
     }
@@ -25,6 +27,7 @@ public class SimpleWaitNotifyTest {
 class Fill extends Thread {
 
     int total;
+    boolean done = false;
 
     @Override
     public void run() {
@@ -32,6 +35,7 @@ class Fill extends Thread {
             for (int i = 0; i < 100; i++) {
                 total += i;
             }
+            done = true;
             notify();
         }
     }
