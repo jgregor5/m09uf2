@@ -36,5 +36,7 @@ public class AsyncPrinter implements Runnable {
         public Job(int id, String username, int pages) {
             // completar
         }
+        
+        // completar
     }
 }
