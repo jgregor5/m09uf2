@@ -65,9 +65,9 @@ public class AsyncTaskPrinterTest {
             waitMillis(wait);
             Future<Job> future = printer.printDocument(username, pages);            
             try {
-                System.out.println("USER " + username + " waiting for job ");
-                future.get();
-                System.out.println("USER " + username + " finished job ");
+                System.out.println("USER " + username + " waiting for a job");
+                Job job = future.get();
+                System.out.println("USER " + username + " finished job " + job);
                 
             } catch (InterruptedException | ExecutionException ex) {
                 ex.printStackTrace();
