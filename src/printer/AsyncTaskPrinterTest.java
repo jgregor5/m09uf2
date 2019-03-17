@@ -23,8 +23,9 @@ public class AsyncTaskPrinterTest {
         
         for (int i=0; i<COUNT; i++) {
             int pages = r.nextInt(4) + 1;
-            long delay = 250 + r.nextInt(2000);
-            users[i] = new PrintUser("" + (char)(i + 65), printer, delay, pages);
+            long delay = 250 + r.nextInt(2000);            
+            long delay2 = r.nextInt(2) > 0?  250 + r.nextInt(2000) : 0;
+            users[i] = new PrintUser("" + (char)(i + 65), printer, delay, delay2, pages);
         }
         
         Thread[] threads = new Thread[COUNT];
@@ -49,28 +50,38 @@ public class AsyncTaskPrinterTest {
     static class PrintUser implements Runnable {
         
         private String username;
-        private long wait;
+        private long wait, cancelWait;
         private int pages;
         private AsyncTaskPrinter printer;
         
-        public PrintUser(String username, AsyncTaskPrinter printer, long wait, int pages) {
+        public PrintUser(String username, AsyncTaskPrinter printer, long wait, long cancelWait, int pages) {
             this.username = username;
             this.printer = printer;
             this.wait = wait;
+            this.cancelWait = cancelWait;
             this.pages = pages;
         }
 
         @Override
         public void run() {
             waitMillis(wait);
-            Future<Job> future = printer.printDocument(username, pages);            
-            try {
-                System.out.println("USER " + username + " waiting for a job");
-                Job job = future.get();
-                System.out.println("USER " + username + " finished job " + job);
+            Future<Job> future = printer.printDocument(username, pages);
                 
-            } catch (InterruptedException | ExecutionException ex) {
-                ex.printStackTrace();
+            if (cancelWait > 0) {
+                // try to cancel it
+                waitMillis(cancelWait);
+                boolean done = future.cancel(false);
+                System.out.println("cancelling of job for " + username + " done: " + done);
+            }
+            else {
+                try {
+                    System.out.println("USER " + username + " waiting for a job");
+                    Job job = future.get();
+                    System.out.println("USER " + username + " finished job " + job);
+
+                } catch (InterruptedException | ExecutionException ex) {
+                    ex.printStackTrace();
+                }                
             }
         }
     }
