@@ -9,4 +9,9 @@ package test;
  */
 public class ActivitatEspectacle {
     
+    interface Espectacle {
+        
+        int lliures(int sessio);
+        String[] reservar(int sessio, int numseients);
+    }
 }
